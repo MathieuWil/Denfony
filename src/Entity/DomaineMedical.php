@@ -24,12 +24,19 @@ class DomaineMedical
     /**
      * @var Collection<int, Medecin>
      */
-    #[ORM\OneToMany(targetEntity: Medecin::class, mappedBy: 'iddomaine')]
-    private Collection $medecins;
+    #[ORM\OneToMany(targetEntity: Medecin::class, mappedBy: 'idDomaine')]
+    private Collection $lesMedecins;
+
+    /**
+     * @var Collection<int, Rdv>
+     */
+    #[ORM\OneToMany(targetEntity: Rdv::class, mappedBy: 'idDomaineMedical')]
+    private Collection $rdvs;
 
     public function __construct()
     {
-        $this->medecins = new ArrayCollection();
+        $this->lesMedecins = new ArrayCollection();
+        $this->rdvs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -64,27 +71,57 @@ class DomaineMedical
     /**
      * @return Collection<int, Medecin>
      */
-    public function getMedecins(): Collection
+    public function getLesMedecins(): Collection
     {
-        return $this->medecins;
+        return $this->lesMedecins;
     }
 
-    public function addMedecin(Medecin $medecin): static
+    public function addLesMedecin(Medecin $lesMedecin): static
     {
-        if (!$this->medecins->contains($medecin)) {
-            $this->medecins->add($medecin);
-            $medecin->setIddomaine($this);
+        if (!$this->lesMedecins->contains($lesMedecin)) {
+            $this->lesMedecins->add($lesMedecin);
+            $lesMedecin->setIdDomaine($this);
         }
 
         return $this;
     }
 
-    public function removeMedecin(Medecin $medecin): static
+    public function removeLesMedecin(Medecin $lesMedecin): static
     {
-        if ($this->medecins->removeElement($medecin)) {
+        if ($this->lesMedecins->removeElement($lesMedecin)) {
             // set the owning side to null (unless already changed)
-            if ($medecin->getIddomaine() === $this) {
-                $medecin->setIddomaine(null);
+            if ($lesMedecin->getIdDomaine() === $this) {
+                $lesMedecin->setIdDomaine(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rdv>
+     */
+    public function getRdvs(): Collection
+    {
+        return $this->rdvs;
+    }
+
+    public function addRdv(Rdv $rdv): static
+    {
+        if (!$this->rdvs->contains($rdv)) {
+            $this->rdvs->add($rdv);
+            $rdv->setIdDomaineMedical($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRdv(Rdv $rdv): static
+    {
+        if ($this->rdvs->removeElement($rdv)) {
+            // set the owning side to null (unless already changed)
+            if ($rdv->getIdDomaineMedical() === $this) {
+                $rdv->setIdDomaineMedical(null);
             }
         }
 

@@ -16,25 +16,30 @@ class Rdv
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $idrdv = null;
+    #[ORM\OneToOne(inversedBy: 'rdv', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Utilisateur $idPatient = null;
+
+    #[ORM\OneToOne(inversedBy: 'rdvMedecin', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Utilisateur $idMedecin = null;
 
     #[ORM\ManyToOne(inversedBy: 'rdvs')]
-    private ?patient $idpatient = null;
-
-    #[ORM\ManyToOne(inversedBy: 'rdvs')]
-    private ?medecin $idmedecin = null;
+    private ?DomaineMedical $idDomaineMedical = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $daterdv = null;
+    private ?\DateTimeInterface $dateRdv = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $description = null;
+    private ?string $statut = null;
 
     /**
      * @var Collection<int, Ordonnance>
      */
-    #[ORM\OneToMany(targetEntity: Ordonnance::class, mappedBy: 'idrdv')]
+    #[ORM\OneToMany(targetEntity: Ordonnance::class, mappedBy: 'idRdv', orphanRemoval: true)]
     private Collection $ordonnances;
 
     public function __construct()
@@ -47,50 +52,50 @@ class Rdv
         return $this->id;
     }
 
-    public function getIdrdv(): ?int
+    public function getIdPatient(): ?Utilisateur
     {
-        return $this->idrdv;
+        return $this->idPatient;
     }
 
-    public function setIdrdv(int $idrdv): static
+    public function setIdPatient(Utilisateur $idPatient): static
     {
-        $this->idrdv = $idrdv;
+        $this->idPatient = $idPatient;
 
         return $this;
     }
 
-    public function getIdpatient(): ?patient
+    public function getIdMedecin(): ?Utilisateur
     {
-        return $this->idpatient;
+        return $this->idMedecin;
     }
 
-    public function setIdpatient(?patient $idpatient): static
+    public function setIdMedecin(Utilisateur $idMedecin): static
     {
-        $this->idpatient = $idpatient;
+        $this->idMedecin = $idMedecin;
 
         return $this;
     }
 
-    public function getIdmedecin(): ?medecin
+    public function getIdDomaineMedical(): ?DomaineMedical
     {
-        return $this->idmedecin;
+        return $this->idDomaineMedical;
     }
 
-    public function setIdmedecin(?medecin $idmedecin): static
+    public function setIdDomaineMedical(?DomaineMedical $idDomaineMedical): static
     {
-        $this->idmedecin = $idmedecin;
+        $this->idDomaineMedical = $idDomaineMedical;
 
         return $this;
     }
 
-    public function getDaterdv(): ?\DateTimeInterface
+    public function getDateRdv(): ?\DateTimeInterface
     {
-        return $this->daterdv;
+        return $this->dateRdv;
     }
 
-    public function setDaterdv(\DateTimeInterface $daterdv): static
+    public function setDateRdv(\DateTimeInterface $dateRdv): static
     {
-        $this->daterdv = $daterdv;
+        $this->dateRdv = $dateRdv;
 
         return $this;
     }
@@ -100,9 +105,21 @@ class Rdv
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): static
+    {
+        $this->statut = $statut;
 
         return $this;
     }
@@ -119,7 +136,7 @@ class Rdv
     {
         if (!$this->ordonnances->contains($ordonnance)) {
             $this->ordonnances->add($ordonnance);
-            $ordonnance->setIdrdv($this);
+            $ordonnance->setIdRdv($this);
         }
 
         return $this;
@@ -129,8 +146,8 @@ class Rdv
     {
         if ($this->ordonnances->removeElement($ordonnance)) {
             // set the owning side to null (unless already changed)
-            if ($ordonnance->getIdrdv() === $this) {
-                $ordonnance->setIdrdv(null);
+            if ($ordonnance->getIdRdv() === $this) {
+                $ordonnance->setIdRdv(null);
             }
         }
 

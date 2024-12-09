@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\PatientRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,7 +16,7 @@ class Patient
 
     #[ORM\OneToOne(inversedBy: 'patient', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?utilisateurs $idpatient = null;
+    private ?Utilisateur $idPatient = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateInscription = null;
@@ -26,30 +24,19 @@ class Patient
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adresse = null;
 
-    /**
-     * @var Collection<int, Rdv>
-     */
-    #[ORM\OneToMany(targetEntity: Rdv::class, mappedBy: 'idpatient')]
-    private Collection $rdvs;
-
-    public function __construct()
-    {
-        $this->rdvs = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIdpatient(): ?utilisateurs
+    public function getIdPatient(): ?Utilisateur
     {
-        return $this->idpatient;
+        return $this->idPatient;
     }
 
-    public function setIdpatient(utilisateurs $idpatient): static
+    public function setIdPatient(Utilisateur $idPatient): static
     {
-        $this->idpatient = $idpatient;
+        $this->idPatient = $idPatient;
 
         return $this;
     }
@@ -74,36 +61,6 @@ class Patient
     public function setAdresse(?string $adresse): static
     {
         $this->adresse = $adresse;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Rdv>
-     */
-    public function getRdvs(): Collection
-    {
-        return $this->rdvs;
-    }
-
-    public function addRdv(Rdv $rdv): static
-    {
-        if (!$this->rdvs->contains($rdv)) {
-            $this->rdvs->add($rdv);
-            $rdv->setIdpatient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRdv(Rdv $rdv): static
-    {
-        if ($this->rdvs->removeElement($rdv)) {
-            // set the owning side to null (unless already changed)
-            if ($rdv->getIdpatient() === $this) {
-                $rdv->setIdpatient(null);
-            }
-        }
 
         return $this;
     }

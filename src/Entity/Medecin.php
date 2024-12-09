@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\MedecinRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,40 +14,29 @@ class Medecin
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'medecin', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'dateDebut', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?utilisateurs $idmedecin = null;
+    private ?Utilisateur $idMedecin = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDebut = null;
 
-    #[ORM\ManyToOne(inversedBy: 'medecins')]
-    private ?domaineMedical $iddomaine = null;
-
-    /**
-     * @var Collection<int, Rdv>
-     */
-    #[ORM\OneToMany(targetEntity: Rdv::class, mappedBy: 'idmedecin')]
-    private Collection $rdvs;
-
-    public function __construct()
-    {
-        $this->rdvs = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'lesMedecins')]
+    private ?DomaineMedical $idDomaine = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIdmedecin(): ?utilisateurs
+    public function getIdMedecin(): ?Utilisateur
     {
-        return $this->idmedecin;
+        return $this->idMedecin;
     }
 
-    public function setIdmedecin(utilisateurs $idmedecin): static
+    public function setIdMedecin(Utilisateur $idMedecin): static
     {
-        $this->idmedecin = $idmedecin;
+        $this->idMedecin = $idMedecin;
 
         return $this;
     }
@@ -59,51 +46,21 @@ class Medecin
         return $this->dateDebut;
     }
 
-    public function setDateDebut(\DateTimeInterface $dateDebut): static
+    public function setDateDebut(?\DateTimeInterface $dateDebut): static
     {
         $this->dateDebut = $dateDebut;
 
         return $this;
     }
 
-    public function getIddomaine(): ?domaineMedical
+    public function getIdDomaine(): ?DomaineMedical
     {
-        return $this->iddomaine;
+        return $this->idDomaine;
     }
 
-    public function setIddomaine(?domaineMedical $iddomaine): static
+    public function setIdDomaine(?DomaineMedical $idDomaine): static
     {
-        $this->iddomaine = $iddomaine;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Rdv>
-     */
-    public function getRdvs(): Collection
-    {
-        return $this->rdvs;
-    }
-
-    public function addRdv(Rdv $rdv): static
-    {
-        if (!$this->rdvs->contains($rdv)) {
-            $this->rdvs->add($rdv);
-            $rdv->setIdmedecin($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRdv(Rdv $rdv): static
-    {
-        if ($this->rdvs->removeElement($rdv)) {
-            // set the owning side to null (unless already changed)
-            if ($rdv->getIdmedecin() === $this) {
-                $rdv->setIdmedecin(null);
-            }
-        }
+        $this->idDomaine = $idDomaine;
 
         return $this;
     }
