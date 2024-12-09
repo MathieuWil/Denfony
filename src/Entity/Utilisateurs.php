@@ -28,6 +28,12 @@ class Utilisateurs
     #[ORM\Column(length: 255)]
     private ?string $mdp = null;
 
+    #[ORM\OneToOne(mappedBy: 'idpatient', cascade: ['persist', 'remove'])]
+    private ?Patient $patient = null;
+
+    #[ORM\OneToOne(mappedBy: 'idmedecin', cascade: ['persist', 'remove'])]
+    private ?Medecin $medecin = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -96,6 +102,40 @@ class Utilisateurs
     public function setMdp(string $mdp): static
     {
         $this->mdp = $mdp;
+
+        return $this;
+    }
+
+    public function getPatient(): ?Patient
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(Patient $patient): static
+    {
+        // set the owning side of the relation if necessary
+        if ($patient->getIdpatient() !== $this) {
+            $patient->setIdpatient($this);
+        }
+
+        $this->patient = $patient;
+
+        return $this;
+    }
+
+    public function getMedecin(): ?Medecin
+    {
+        return $this->medecin;
+    }
+
+    public function setMedecin(Medecin $medecin): static
+    {
+        // set the owning side of the relation if necessary
+        if ($medecin->getIdmedecin() !== $this) {
+            $medecin->setIdmedecin($this);
+        }
+
+        $this->medecin = $medecin;
 
         return $this;
     }
