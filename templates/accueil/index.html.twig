@@ -8,23 +8,11 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<<<<<<< HEAD
 <h1>ACCUEIL</h1>
 <br><br>
 <div class="card">
     <a href="{{path("app_prendre_rdv")}}" class="btn btn-primary" id-"btn_termine">Prendre un Rendez-vous :</a>
   </div>
-=======
-<div class="example-wrapper">
-
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/mysti/Documents/Bachelor/projets/projet1_dentfony/Denfony/src/Controller/AccueilController.php</code></li>
-        <li>Your template at <code>C:/Users/mysti/Documents/Bachelor/projets/projet1_dentfony/Denfony/templates/accueil/index.html.twig</code></li>
-    </ul>
->>>>>>> elian
 </div>
 <br><br>
 <div class="card">
@@ -48,12 +36,11 @@
     {% for rdv_ouvert in rdv %}
         <tr>
             <th scope="row">{{ rdv_ouvert.id }}</th>
-            <td>{{ rdv_ouvert.dateRdv }}</td>  {# Assurez-vous que "dateRdv" est le bon nom de propriété #}
+            <td>{{ rdv_ouvert.dateRdv|date('Y-m-d') }}</td>  {# Assurez-vous que "dateRdv" est le bon nom de propriété #}
             <td>{{ rdv_ouvert.idMedecin }}</td>  {# Si "medecin" est une relation dans l'entité #}
             <td>{{ rdv_ouvert.description }}</td>
             <td>{{ rdv_ouvert.statut }}</td>
         </tr>
-        {{ dump(rdv) }}
     {% endfor %}
     </tbody>
 </table>
