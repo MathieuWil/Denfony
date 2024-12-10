@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -37,20 +38,20 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $tel = null;
 
-    #[ORM\OneToOne(mappedBy: 'idMedecin', cascade: ['persist', 'remove'])]
-    private ?Medecin $medecin = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateInscription = null;
 
-    #[ORM\OneToOne(mappedBy: 'idPatient', cascade: ['persist', 'remove'])]
-    private ?Patient $patient = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $adresse = null;
 
-    #[ORM\OneToOne(mappedBy: 'idPatient', cascade: ['persist', 'remove'])]
-    private ?Rdv $rdv = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $datedebut = null;
 
-    #[ORM\OneToOne(mappedBy: 'idMedecin', cascade: ['persist', 'remove'])]
-    private ?Rdv $rdvMedecin = null;
+    #[ORM\ManyToOne]
+    private ?DomaineMedical $idDomaine = null;
 
     public function getId(): ?int
     {
@@ -81,7 +82,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @see UserInterface
-     *
      * @return list<string>
      */
     public function getRoles(): array
@@ -156,77 +156,57 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->tel;
     }
 
-    public function setTel(string $tel): static
+    public function setTel(?string $tel): static
     {
         $this->tel = $tel;
 
         return $this;
     }
 
-    public function getMedecin(): ?Medecin
+    public function getDateInscription(): ?\DateTimeInterface
     {
-        return $this->medecin;
+        return $this->dateInscription;
     }
 
-    public function setMedecin(Medecin $medecin): static
+    public function setDateInscription(?\DateTimeInterface $dateInscription): static
     {
-        // set the owning side of the relation if necessary
-        if ($medecin->getIdMedecin() !== $this) {
-            $medecin->setIdMedecin($this);
-        }
-
-        $this->medecin = $medecin;
+        $this->dateInscription = $dateInscription;
 
         return $this;
     }
 
-    public function getPatient(): ?Patient
+    public function getAdresse(): ?string
     {
-        return $this->patient;
+        return $this->adresse;
     }
 
-    public function setPatient(Patient $patient): static
+    public function setAdresse(?string $adresse): static
     {
-        // set the owning side of the relation if necessary
-        if ($patient->getIdPatient() !== $this) {
-            $patient->setIdPatient($this);
-        }
-
-        $this->patient = $patient;
+        $this->adresse = $adresse;
 
         return $this;
     }
 
-    public function getRdv(): ?Rdv
+    public function getDatedebut(): ?\DateTimeInterface
     {
-        return $this->rdv;
+        return $this->datedebut;
     }
 
-    public function setRdv(Rdv $rdv): static
+    public function setDatedebut(?\DateTimeInterface $datedebut): static
     {
-        // set the owning side of the relation if necessary
-        if ($rdv->getIdPatient() !== $this) {
-            $rdv->setIdPatient($this);
-        }
-
-        $this->rdv = $rdv;
+        $this->datedebut = $datedebut;
 
         return $this;
     }
 
-    public function getRdvMedecin(): ?Rdv
+    public function getIdDomaine(): ?DomaineMedical
     {
-        return $this->rdvMedecin;
+        return $this->idDomaine;
     }
 
-    public function setRdvMedecin(Rdv $rdvMedecin): static
+    public function setIdDomaine(?DomaineMedical $idDomaine): static
     {
-        // set the owning side of the relation if necessary
-        if ($rdvMedecin->getIdMedecin() !== $this) {
-            $rdvMedecin->setIdMedecin($this);
-        }
-
-        $this->rdvMedecin = $rdvMedecin;
+        $this->idDomaine = $idDomaine;
 
         return $this;
     }

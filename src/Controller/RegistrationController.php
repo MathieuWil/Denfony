@@ -13,6 +13,7 @@ use App\Form\RegistrationType;
 use App\Repository\UtilisateurRepository;
 
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use DateTime;
 
 class RegistrationController extends AbstractController
 {
@@ -24,8 +25,10 @@ class RegistrationController extends AbstractController
 
         // Create the form
         $registerForm = $this->createForm(RegistrationType::class, $utilisateur);
-
+        
         $utilisateur->setRoles(['ROLE_PATIENT']);
+        $currentDateTime = new \DateTime();
+        $utilisateur->setDateInscription($currentDateTime);
 
         // Handle the form submission
         $registerForm->handleRequest($request);

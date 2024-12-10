@@ -2,12 +2,9 @@
 
 namespace App\Form;
 
-use App\Entity\Medecin;
-use App\Entity\Patient;
-use App\Entity\Rdv;
+//use App\Entity\DomaineMedical;
 use App\Entity\Utilisateur;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+//use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,21 +20,16 @@ class RegistrationType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('tel')
-#            ->add('medecin', EntityType::class, [
-#                'class' => Medecin::class,
-#'choice_label' => 'id',
+            ->add('dateInscription', null, [
+                'widget' => 'single_text'
+            ])
+            ->add('adresse')
+#            ->add('dateDebut', null, [
+#                'widget' => 'single_text'
 #            ])
-#            ->add('patient', EntityType::class, [
-#                'class' => Patient::class,
-#'choice_label' => 'id',
-#            ])
-#            ->add('rdv', EntityType::class, [
-#                'class' => Rdv::class,
-#'choice_label' => 'id',
-#            ])
-#            ->add('rdvMedecin', EntityType::class, [
-#                'class' => Rdv::class,
-#'choice_label' => 'id',
+#            ->add('idDomaine', EntityType::class, [
+#               'class' => DomaineMedical::class,
+#                'choice_label' => 'id',
 #            ])
         ;
     }
