@@ -1,5 +1,81 @@
 body {
-    background-color: rgb(184, 219, 232);
-    margin: auto;
-    width: 60%;
+    background-color: #a7c7e7;  /* Fond bleu ciel */
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    margin: 0;
+}
+
+.bg-light-gray {
+    background-color: #a7c7e7;  /* Fond bleu ciel */
+}
+
+.container-fluid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card {
+    border-radius: 10px;
+}
+
+.card-body {
+    padding: 30px;
+    background-color: white;  /* Fond blanc pour le formulaire */
+}
+
+form .form-control-lg {
+    border-radius: 5px;
+    font-size: 1.1rem;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+}
+
+form .form-control-lg:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.custom-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+    display: block;
+    text-transform: capitalize;
+}
+
+.btn-dark {
+    background-color: #343a40;
+    border: none;
+}
+
+.btn-dark:hover {
+    background-color: #23272b;
+}
+
+.btn-dark.text-white {
+    color: white;  /* Texte en blanc sur les boutons */
+}
+
+.alert {
+    margin-top: 20px;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+.mt-3 {
+    margin-top: 1rem;
 }
