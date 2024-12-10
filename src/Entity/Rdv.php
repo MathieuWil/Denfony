@@ -21,11 +21,8 @@ class Rdv
     private ?Utilisateur $idPatient = null;
 
     #[ORM\OneToOne(inversedBy: 'rdvMedecin', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Utilisateur $idMedecin = null;
-
-    #[ORM\ManyToOne(inversedBy: 'rdvs')]
-    private ?DomaineMedical $idDomaineMedical = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateRdv = null;
@@ -72,18 +69,6 @@ class Rdv
     public function setIdMedecin(Utilisateur $idMedecin): static
     {
         $this->idMedecin = $idMedecin;
-
-        return $this;
-    }
-
-    public function getIdDomaineMedical(): ?DomaineMedical
-    {
-        return $this->idDomaineMedical;
-    }
-
-    public function setIdDomaineMedical(?DomaineMedical $idDomaineMedical): static
-    {
-        $this->idDomaineMedical = $idDomaineMedical;
 
         return $this;
     }
