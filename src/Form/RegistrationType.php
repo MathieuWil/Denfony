@@ -20,9 +20,9 @@ class RegistrationType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('tel')
-            ->add('dateInscription', null, [
-                'widget' => 'single_text'
-            ])
+#            ->add('dateInscription', null, [
+#                'widget' => 'single_text'
+#            ])
             ->add('adresse')
 #            ->add('dateDebut', null, [
 #                'widget' => 'single_text'
