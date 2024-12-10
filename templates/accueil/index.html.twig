@@ -22,9 +22,29 @@
   <div class="card-body">
     <h5 class="card-title">Liste de vos Rendez-vous :</h5>
     
-    
-
-
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date de Rendez-vous</th>
+            <th scope="col">Id médecin</th>
+            <th scope="col">Description</th>
+            <th scope="col">Statut</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for rdv_ouvert in rdv %}
+        <tr>
+            <th scope="row">{{ rdv_ouvert.id }}</th>
+            <td>{{ rdv_ouvert.dateRdv }}</td>  {# Assurez-vous que "dateRdv" est le bon nom de propriété #}
+            <td>{{ rdv_ouvert.idMedecin }}</td>  {# Si "medecin" est une relation dans l'entité #}
+            <td>{{ rdv_ouvert.description }}</td>
+            <td>{{ rdv_ouvert.statut }}</td>
+        </tr>
+        {{ dump(rdv) }}
+    {% endfor %}
+    </tbody>
+</table>
 
   </div>
 </div>
