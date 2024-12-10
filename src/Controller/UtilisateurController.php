@@ -58,4 +58,3 @@ class UtilisateurController extends AbstractController
         return $this->redirectToRoute('app_logout');
     }
 }
-
