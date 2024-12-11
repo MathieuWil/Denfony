@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -52,6 +54,24 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToOne]
     private ?DomaineMedical $idDomaine = null;
+
+    /**
+     * @var Collection<int, Rdv>
+     */
+    #[ORM\OneToMany(targetEntity: Rdv::class, mappedBy: 'id_patient')]
+    private Collection $rdvs;
+
+    /**
+     * @var Collection<int, Rdv>
+     */
+    #[ORM\OneToMany(targetEntity: Rdv::class, mappedBy: 'id_medecin')]
+    private Collection $rdvsMedecin;
+
+    public function __construct()
+    {
+        $this->rdvs = new ArrayCollection();
+        $this->rdvsMedecin = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -207,6 +227,66 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIdDomaine(?DomaineMedical $idDomaine): static
     {
         $this->idDomaine = $idDomaine;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rdv>
+     */
+    public function getRdvs(): Collection
+    {
+        return $this->rdvs;
+    }
+
+    public function addRdv(Rdv $rdv): static
+    {
+        if (!$this->rdvs->contains($rdv)) {
+            $this->rdvs->add($rdv);
+            $rdv->setIdPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRdv(Rdv $rdv): static
+    {
+        if ($this->rdvs->removeElement($rdv)) {
+            // set the owning side to null (unless already changed)
+            if ($rdv->getIdPatient() === $this) {
+                $rdv->setIdPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rdv>
+     */
+    public function getRdvsMedecin(): Collection
+    {
+        return $this->rdvsMedecin;
+    }
+
+    public function addRdvsMedecin(Rdv $rdvsMedecin): static
+    {
+        if (!$this->rdvsMedecin->contains($rdvsMedecin)) {
+            $this->rdvsMedecin->add($rdvsMedecin);
+            $rdvsMedecin->setIdMedecin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRdvsMedecin(Rdv $rdvsMedecin): static
+    {
+        if ($this->rdvsMedecin->removeElement($rdvsMedecin)) {
+            // set the owning side to null (unless already changed)
+            if ($rdvsMedecin->getIdMedecin() === $this) {
+                $rdvsMedecin->setIdMedecin(null);
+            }
+        }
 
         return $this;
     }

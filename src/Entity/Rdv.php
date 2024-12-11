@@ -16,21 +16,17 @@ class Rdv
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'rdv', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Utilisateur $idPatient = null;
-
-    #[ORM\OneToOne(inversedBy: 'rdvMedecin', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Utilisateur $idMedecin = null;
-
     #[ORM\ManyToOne(inversedBy: 'rdvs')]
-    private ?DomaineMedical $idDomaineMedical = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Utilisateur $id_patient = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateRdv = null;
+    #[ORM\ManyToOne(inversedBy: 'rdvsMedecin')]
+    private ?Utilisateur $id_medecin = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $date_rdv = null;
+
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
@@ -39,7 +35,7 @@ class Rdv
     /**
      * @var Collection<int, Ordonnance>
      */
-    #[ORM\OneToMany(targetEntity: Ordonnance::class, mappedBy: 'idRdv', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Ordonnance::class, mappedBy: 'id_rdv')]
     private Collection $ordonnances;
 
     public function __construct()
@@ -54,48 +50,36 @@ class Rdv
 
     public function getIdPatient(): ?Utilisateur
     {
-        return $this->idPatient;
+        return $this->id_patient;
     }
 
-    public function setIdPatient(Utilisateur $idPatient): static
+    public function setIdPatient(?Utilisateur $id_patient): static
     {
-        $this->idPatient = $idPatient;
+        $this->id_patient = $id_patient;
 
         return $this;
     }
 
     public function getIdMedecin(): ?Utilisateur
     {
-        return $this->idMedecin;
+        return $this->id_medecin;
     }
 
-    public function setIdMedecin(Utilisateur $idMedecin): static
+    public function setIdMedecin(?Utilisateur $id_medecin): static
     {
-        $this->idMedecin = $idMedecin;
-
-        return $this;
-    }
-
-    public function getIdDomaineMedical(): ?DomaineMedical
-    {
-        return $this->idDomaineMedical;
-    }
-
-    public function setIdDomaineMedical(?DomaineMedical $idDomaineMedical): static
-    {
-        $this->idDomaineMedical = $idDomaineMedical;
+        $this->id_medecin = $id_medecin;
 
         return $this;
     }
 
     public function getDateRdv(): ?\DateTimeInterface
     {
-        return $this->dateRdv;
+        return $this->date_rdv;
     }
 
-    public function setDateRdv(\DateTimeInterface $dateRdv): static
+    public function setDateRdv(\DateTimeInterface $date_rdv): static
     {
-        $this->dateRdv = $dateRdv;
+        $this->date_rdv = $date_rdv;
 
         return $this;
     }
@@ -105,7 +89,7 @@ class Rdv
         return $this->description;
     }
 
-    public function setDescription(?string $description): static
+    public function setDescription(string $description): static
     {
         $this->description = $description;
 

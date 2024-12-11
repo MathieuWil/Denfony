@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\RdvRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -9,10 +10,16 @@ use Symfony\Component\Routing\Attribute\Route;
 class AccueilController extends AbstractController
 {
     #[Route('/accueil', name: 'app_accueil')]
-    public function index(): Response
+    public function index(RdvRepository $RdvRepository): Response
     {
+        // Récupération de tous les rendez-vous
+        $rdv = $RdvRepository->findAll();
+        $user = $this->getUser();
+        
+        // Rendu de la vue avec les données du rendez-vous
         return $this->render('accueil/index.html.twig', [
-            'controller_name' => 'AccueilController',
+            'rdv' => $rdv,  // On passe la variable 'rdv' à la vue
+            'user' => $user,  // On passe la variable 'user' à la vue
         ]);
     }
 }

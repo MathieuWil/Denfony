@@ -14,8 +14,12 @@ class Ordonnance
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\ManyToOne(inversedBy: 'ordonnances')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Rdv $id_rdv = null;
+
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $dateDelivree = null;
+    private ?\DateTimeInterface $date_delivree = null;
 
     #[ORM\Column(length: 255)]
     private ?string $medicament = null;
@@ -23,23 +27,31 @@ class Ordonnance
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ordonnances')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Rdv $idRdv = null;
-
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDateDelivree(): ?\DateTimeInterface
+    public function getIdRdv(): ?Rdv
     {
-        return $this->dateDelivree;
+        return $this->id_rdv;
     }
 
-    public function setDateDelivree(\DateTimeInterface $dateDelivree): static
+    public function setIdRdv(?Rdv $id_rdv): static
     {
-        $this->dateDelivree = $dateDelivree;
+        $this->id_rdv = $id_rdv;
+
+        return $this;
+    }
+
+    public function getDateDelivree(): ?\DateTimeInterface
+    {
+        return $this->date_delivree;
+    }
+
+    public function setDateDelivree(\DateTimeInterface $date_delivree): static
+    {
+        $this->date_delivree = $date_delivree;
 
         return $this;
     }
@@ -64,18 +76,6 @@ class Ordonnance
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getIdRdv(): ?Rdv
-    {
-        return $this->idRdv;
-    }
-
-    public function setIdRdv(?Rdv $idRdv): static
-    {
-        $this->idRdv = $idRdv;
 
         return $this;
     }

@@ -8,13 +8,157 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div id="page-accueil">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/mysti/Documents/Bachelor/projets/projet1_dentfony/Denfony/src/Controller/AccueilController.php</code></li>
-        <li>Your template at <code>C:/Users/mysti/Documents/Bachelor/projets/projet1_dentfony/Denfony/templates/accueil/index.html.twig</code></li>
-    </ul>
+  {{ dump(user) }}
+  {{ dump(rdv) }}
+
+  <h1>ACCUEIL</h1>
+
+  <br><br>
+
+
+{# Début de la gestion des Patients #}
+{% if is_granted("ROLE_PATIENT") %}
+
+  <div class="card">
+      <a href="{{path("app_prendre_rdv")}}" class="btn btn-primary" id-"btn_termine">Prendre un Rendez-vous :</a>
+  </div>
+
+  <br><br>
+
+
+  <div class="card">
+    <div class="card-header">
+      Rendez-Vous Ouverts
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Liste de vos Rendez-vous :</h5>
+    
+
+  {% for rdv_ouverts in rdv %}
+
+  {% if rdv_ouverts.statut == "en attente" or rdv_ouverts.statut == "en cours" %}
+    <a href="{{ path("app_rdv", {"id" : rdv_ouverts.id}) }}">
+      <table class="table">
+          <thead>
+              <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Date de Rendez-vous</th>
+            {% if rdv_ouverts.idMedecin %}
+                  <th scope="col">Id médecin</th>
+            {% endif %}
+                  <th scope="col">Description</th>
+                  <th scope="col">Statut</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <th scope="row">{{ rdv_ouverts.id }}</th>
+                  <td>{{ rdv_ouverts.dateRdv|date('Y-m-d') }}</td>  {# Assurez-vous que "dateRdv" est le bon nom de propriété #}
+            {% if rdv_ouverts.idMedecin %}
+                  <td>{{ rdv_ouverts.idMedecin }}</td>  {# Si "medecin" est une relation dans l'entité #}
+            {% endif %}
+                  <td>{{ rdv_ouverts.description }}</td>
+                  <td>{{ rdv_ouverts.statut }}</td>
+              </tr>
+          </tbody>
+      </table>
+    </a>
+
+  {% endif %}
+  {% endfor %}
+
+    </div>
+  </div>
+
+  <br><br>
+
+  <div class="card">
+    <div class="card-header">
+      Rendez-Vous Terminés
+    </div>
+
+    <div class="card-body">
+      <h5 class="card-title">Liste des rendez-vous terminés :</h5>
+      
+  {% for rdv_fermes in rdv %}
+  {% if rdv_fermes.statut == "terminer" or rdv_fermes.statut == "annuler" %}
+      <table class="table">
+          <thead>
+              <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Date de Rendez-vous</th>
+                  <th scope="col">Id médecin</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Statut</th>
+              </tr>
+          </thead>
+          <tbody>
+          {% for rdv_fermes in rdv %}
+              <tr>
+                  <th scope="row">{{ rdv_fermes.id }}</th>
+                  <td>{{ rdv_fermes.dateRdv|date('Y-m-d') }}</td>  {# Assurez-vous que "dateRdv" est le bon nom de propriété #}
+                  <td>{{ rdv_fermes.idMedecin }}</td>  {# Si "medecin" est une relation dans l'entité #}
+                  <td>{{ rdv_fermes.description }}</td>
+                  <td>{{ rdv_fermes.statut }}</td>
+              </tr>
+          {% endfor %}
+          </tbody>
+      </table>
+
+  {% endif %}
+  {% endfor %}
+      
+
+
+
+
+    </div>
+  </div>
+
+{# Fin de la gestion des Patients #}
+{%  endif %}
+
+
+
+{%  if is_granted("ROLE_MEDECIN")  %}
+{# Début de la gestion des Médecins #}
+
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Liste des Rendez-vous à prendre :</h5>
+    
+
+  {% for rdv_ouverts in rdv %}
+    <a href="{{ path("app_rdv", {"id" : rdv_ouverts.id}) }}">
+      <table class="table">
+          <thead>
+              <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Date de Rendez-vous</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Statut</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <th scope="row">{{ rdv_ouverts.id }}</th>
+                  <td>{{ rdv_ouverts.dateRdv|date('Y-m-d') }}</td>  {# Assurez-vous que "dateRdv" est le bon nom de propriété #}
+                  <td>{{ rdv_ouverts.description }}</td>
+                  <td>{{ rdv_ouverts.statut }}</td>
+              </tr>
+          </tbody>
+      </table>
+    </a>
+
+  {% endfor %}
+
+    </div>
+  </div>
+{# Fin de la gestion des Médecins #}
+{% endif %}
+
 </div>
+
 {% endblock %}

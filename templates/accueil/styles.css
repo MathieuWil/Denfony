@@ -1,0 +1,12 @@
+.statut-en-attente {
+  background-color: yellow;
+}
+.statut-en-cours {
+  background-color: green;
+}
+.statut-terminer {
+  background-color: grey;
+}
+.statut-annuler {
+  background-color: red;
+}
