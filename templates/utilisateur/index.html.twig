@@ -1,72 +1,71 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil Utilisateur
-{% endblock %}
+{% block title %}Profil Utilisateur{% endblock %}
 
 {% block body %}
-	<div class="container-fluid bg-light-gray">
-		<div class="card shadow-lg">
-			<div class="card-body">
-				<h2 class="text-center mb-4">Modifier mon profil</h2>
+    <div class="container-fluid bg-light-gray">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h2 class="text-center mb-4">Modifier mon profil</h2>
 
-				{% for type, messages in app.flashes %}
-					{% for message in messages %}
-						<div class="alert alert-{{ type }}">
-							{{ message }}
-						</div>
-					{% endfor %}
-				{% endfor %}
+                {% for type, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ type }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
 
-				<h5>
-					<strong>Nom :</strong>
-					{{ utilisateur.nom }}</h5>
-				<h5>
-					<strong>Prénom :</strong>
-					{{ utilisateur.prenom }}</h5>
-				<h5>
-					<strong>Email :</strong>
-					{{ utilisateur.email }}</h5>
+                <h5><strong>Nom :</strong> {{ utilisateur.nom }}</h5>
+                <h5><strong>Prénom :</strong> {{ utilisateur.prenom }}</h5>
+                <h5><strong>Email :</strong> {{ utilisateur.email }}</h5>
 
-				<form method="POST" action="{{ path('utilisateur_update') }}" class="mt-4">
-					<input type="hidden" name="_csrf_token" value="{{ csrf_token('update_profil') }}">
+                {# Affichage du domaine médical seulement si l'utilisateur est un médecin #}
+                {% if isMedecin %}
+                    {% if hasDomaineMedical %}
+                        <h5><strong>Domaine Médical :</strong> {{ utilisateur.idDomaine.getLabel() }}</h5>
+                    {% else %}
+                        <h5><strong>Domaine Médical :</strong> Non spécifié</h5>
+                    {% endif %}
+                {% endif %}
 
-					<label for="tel" class="custom-label">Téléphone</label>
-					<input type="text" id="tel" name="tel" class="form-control form-control-lg" value="{{ utilisateur.tel }}" required/>
+                <form method="POST" action="{{ path('utilisateur_update') }}" class="mt-4">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('update_profil') }}">
 
-					<label for="adresse" class="custom-label mt-3">Adresse postale</label>
-					<input type="text" id="adresse" name="adresse" class="form-control form-control-lg" value="{{ utilisateur.adresse }}" required/>
+                    <label for="tel" class="custom-label">Téléphone</label>
+                    <input type="text" id="tel" name="tel" class="form-control form-control-lg" value="{{ utilisateur.tel }}" required/>
 
-					<label for="plainPassword" class="custom-label mt-3">Mot de passe</label>
-					<input type="password" id="plainPassword" name="plainPassword" class="form-control form-control-lg" placeholder="Nouveau mot de passe"/>
+                    {# Affichage du champ d'adresse uniquement pour le patient #}
+                    {% if not isMedecin %}
+                        <label for="adresse" class="custom-label mt-3">Adresse postale</label>
+                        <input type="text" id="adresse" name="adresse" class="form-control form-control-lg" value="{{ utilisateur.adresse }}" required/>
+                    {% endif %}
 
-					<label for="plainPasswordConfirm" class="custom-label mt-3">Confirmer le mot de passe</label>
-					<input type="password" id="plainPasswordConfirm" name="plainPasswordConfirm" class="form-control form-control-lg" placeholder="Confirmer le mot de passe"/>
+                    <label for="plainPassword" class="custom-label mt-3">Mot de passe</label>
+                    <input type="password" id="plainPassword" name="plainPassword" class="form-control form-control-lg" placeholder="Nouveau mot de passe"/>
 
-					<div
-						class="d-flex justify-content-between mt-4">
-						<!-- Bouton de mise à jour avec un espacement personnalisé -->
-						<button type="submit" class="btn btn-dark text-white px-4 py-3 rounded-lg shadow-sm custom-btn mr-2">
-							Mettre à jour
-						</button>
-						<!-- Bouton de déconnexion avec un espacement -->
-						<a href="{{ path('app_logout') }}" class="btn btn-dark text-white px-4 py-3 rounded-lg shadow-sm custom-btn">
-							Se déconnecter
-						</a>
-					</div>
+                    <label for="plainPasswordConfirm" class="custom-label mt-3">Confirmer le mot de passe</label>
+                    <input type="password" id="plainPasswordConfirm" name="plainPasswordConfirm" class="form-control form-control-lg" placeholder="Confirmer le mot de passe"/>
 
-				</form>
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="submit" class="btn btn-dark text-white px-4 py-3 rounded-lg shadow-sm custom-btn mr-2">
+                            Mettre à jour
+                        </button>
+                        <a href="{{ path('app_logout') }}" class="btn btn-dark text-white px-4 py-3 rounded-lg shadow-sm custom-btn">
+                            Se déconnecter
+                        </a>
+                    </div>
 
-				<!-- Formulaire pour supprimer le compte avec un bouton amélioré -->
-				<form method="POST" action="{{ path('utilisateur_delete') }}" class="mt-3">
-					<input
-					type="hidden" name="_csrf_token" value="{{ csrf_token('delete_profil') }}">
+                </form>
 
-					<!-- Bouton de suppression avec un design amélioré -->
-					<button type="submit" class="btn btn-danger text-white w-100 py-3 rounded-lg shadow-sm custom-btn">
-						Supprimer le compte
-					</button>
-				</form>
-			</div>
-		</div>
-	</div>
+                <form method="POST" action="{{ path('utilisateur_delete') }}" class="mt-3">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_profil') }}">
+
+                    <button type="submit" class="btn btn-danger text-white w-100 py-3 rounded-lg shadow-sm custom-btn">
+                        Supprimer le compte
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

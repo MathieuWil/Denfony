@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -23,8 +22,16 @@ class UtilisateurController extends AbstractController
             throw $this->createAccessDeniedException('Utilisateur non reconnu.');
         }
 
+        // Vérifier si l'utilisateur est un médecin en vérifiant les rôles
+        $isMedecin = in_array('ROLE_MEDECIN', $utilisateur->getRoles());  // Vérifie si le rôle 'ROLE_MEDECIN' est attribué à l'utilisateur
+
+        // Vérifier si l'utilisateur a un domaine médical
+        $hasDomaineMedical = $utilisateur->getIdDomaine() !== null;  // Vérifie si un domaine médical est attribué
+
         return $this->render('utilisateur/index.html.twig', [
             'utilisateur' => $utilisateur,
+            'isMedecin' => $isMedecin,  // Variable pour savoir si l'utilisateur est médecin
+            'hasDomaineMedical' => $hasDomaineMedical,  // Variable pour savoir si l'utilisateur a un domaine médical
         ]);
     }
 
