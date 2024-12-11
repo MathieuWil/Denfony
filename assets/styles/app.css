@@ -88,11 +88,6 @@ form .form-control-lg:focus {
     margin-top: 1rem;
 }
 
-<<<<<<< HEAD
-nav {
-  background-color: #f4f4f4;
-}
-=======
 /* Style des boutons */
 .custom-btn {
     transition: all 0.3s ease;
@@ -131,6 +126,7 @@ nav {
     margin-right: 15px; /* Ajoute un espacement à droite pour "Mettre à jour" */
 }
 
+nav {
+  background-color: #f4f4f4;
+}
 
-
->>>>>>> Rayan

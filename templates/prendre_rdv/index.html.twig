@@ -3,7 +3,16 @@
 {% block title %}Hello PrendreRdvController!{% endblock %}
 
 {% block body %}
-<h1>Register</h1>
+<style>
+  #page-prendre-rdv {
+    background-color: #f4f4f4;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 15px 50px;
+  }
+</style>
+<div id="page-prendre-rdv">
+<h1>Prendre Rendez vous</h1>
 
 {{ form_start(form) }}
 
@@ -11,10 +20,10 @@
 
     {{ form_row(form.description, { 'attr': {'class': 'form-control'} }) }}
 
-    <div>
+    <div style="margin-top:30px">
         <button type="submit" class="btn btn-primary">Valider</button>
     </div>
 
 {{ form_end(form) }}
-
+</div>
 {% endblock %}
