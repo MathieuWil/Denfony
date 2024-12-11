@@ -8,16 +8,38 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div id="page-rdv-detail">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller att <code>C:/Users/mysti/Documents/Bachelor/projets/projet1_dentfony/Denfony/src/Controller/RdvController.php</code></li>
-        <li>Your template at <code>C:/Users/mysti/Documents/Bachelor/projets/projet1_dentfony/Denfony/templates/rdv/index.html.twig</code></li>
-    </ul>
+{% if is_granted("ROLE_PATIENT") %}
 
-    {{dump(rdv)}}
+    <h1>Votre Rendez-vous</h1>
 
+    <p>Date du RDV</p>
+    <p>{{ rdv.dateRdv|date('Y-m-d') }}</p>
+
+    <p>Description du problème</p>
+    <p>{{ rdv.description }}</p>
+
+    <p>Medecin</p>
+  {% if medecin %}
+    <p>{{ medecin.nom }} {{ medecin.prenom }}</p>
+  {% else %}
+    <p>Le Rdv n'est pas encore pris en charge</p>
+  {% endif %}
+
+  <a href="{{ path("app_annulerRdv", {"id" : rdv.id}) }}">Annuler RDV</a>
+
+{% endif %}
+
+{% if is_granted("ROLE_MEDECIN") %}
+    <h1>Rendez-vous de {{ patient.nom }} {{ patient.prenom }}</h1>
+
+    <p>Date du RDV</p>
+    <p>{{ rdv.dateRdv|date('Y-m-d') }}</p>
+
+    <p>Description du problème</p>
+    <p>{{ rdv.description }}</p>
+{% endif %}
 </div>
+
 {% endblock %}

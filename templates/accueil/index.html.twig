@@ -37,6 +37,7 @@
     
 
   {% for rdv_ouverts in rdv %}
+
   {% if rdv_ouverts.statut == "en attente" or rdv_ouverts.statut == "en cours" %}
     <a href="{{ path("app_rdv", {"id" : rdv_ouverts.id}) }}">
       <table class="table">
