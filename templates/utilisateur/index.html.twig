@@ -1,64 +1,71 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon Profil{% endblock %}
+{% block title %}Profil Utilisateur{% endblock %}
 
 {% block body %}
-<div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light-gray">
-    <div class="row w-100 justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-lg">
-                <div class="card-body bg-light">
-                    <h3 class="text-center mb-4">Mon Profil</h3>
+    <div class="container-fluid bg-light-gray">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <h2 class="text-center mb-4">Modifier mon profil</h2>
 
-                    {# Affichage des messages flash #}
-                    {% for message in app.flashes('success') %}
-                        <div class="alert alert-success">
+                {% for type, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ type }}">
                             {{ message }}
                         </div>
                     {% endfor %}
-                    
-                    {% for message in app.flashes('warning') %}
-                        <div class="alert alert-warning">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                    
-                    <form action="{{ path('utilisateur_update') }}" method="POST">
-                        <div class="form-group">
-                            <label for="nom" class="custom-label">Nom</label>
-                            <input type="text" id="nom" name="nom" class="form-control form-control-lg" value="{{ utilisateur.nom }}" required>
-                        </div>
+                {% endfor %}
 
-                        <div class="form-group mt-3">
-                            <label for="prenom" class="custom-label">Prénom</label>
-                            <input type="text" id="prenom" name="prenom" class="form-control form-control-lg" value="{{ utilisateur.prenom }}" required>
-                        </div>
+                <h5><strong>Nom :</strong> {{ utilisateur.nom }}</h5>
+                <h5><strong>Prénom :</strong> {{ utilisateur.prenom }}</h5>
+                <h5><strong>Email :</strong> {{ utilisateur.email }}</h5>
 
-                        <div class="form-group mt-3">
-                            <label for="email" class="custom-label">Email</label>
-                            <input type="email" id="email" name="email" class="form-control form-control-lg" value="{{ utilisateur.email }}" required>
-                        </div>
+                {# Affichage du domaine médical seulement si l'utilisateur est un médecin #}
+                {% if isMedecin %}
+                    {% if hasDomaineMedical %}
+                        <h5><strong>Domaine Médical :</strong> {{ utilisateur.idDomaine.getLabel() }}</h5>
+                    {% else %}
+                        <h5><strong>Domaine Médical :</strong> Non spécifié</h5>
+                    {% endif %}
+                {% endif %}
 
-                        <div class="form-group mt-3">
-                            <label for="tel" class="custom-label">Téléphone</label>
-                            <input type="tel" id="tel" name="tel" class="form-control form-control-lg" value="{{ utilisateur.tel }}" required>
-                        </div>
+                <form method="POST" action="{{ path('utilisateur_update') }}" class="mt-4">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('update_profil') }}">
 
-                        <button type="submit" class="btn btn-dark btn-lg btn-block text-white mt-4">Mettre à jour</button>
-                    </form>
+                    <label for="tel" class="custom-label">Téléphone</label>
+                    <input type="text" id="tel" name="tel" class="form-control form-control-lg" value="{{ utilisateur.tel }}" required/>
+
+                    {# Affichage du champ d'adresse uniquement pour le patient #}
+                    {% if not isMedecin %}
+                        <label for="adresse" class="custom-label mt-3">Adresse postale</label>
+                        <input type="text" id="adresse" name="adresse" class="form-control form-control-lg" value="{{ utilisateur.adresse }}" required/>
+                    {% endif %}
+
+                    <label for="plainPassword" class="custom-label mt-3">Mot de passe</label>
+                    <input type="password" id="plainPassword" name="plainPassword" class="form-control form-control-lg" placeholder="Nouveau mot de passe"/>
+
+                    <label for="plainPasswordConfirm" class="custom-label mt-3">Confirmer le mot de passe</label>
+                    <input type="password" id="plainPasswordConfirm" name="plainPasswordConfirm" class="form-control form-control-lg" placeholder="Confirmer le mot de passe"/>
 
                     <div class="d-flex justify-content-between mt-4">
-                        <form action="{{ path('utilisateur_delete') }}" method="POST" class="w-45">
-                            <button type="submit" class="btn btn-dark btn-lg text-white w-100">Supprimer le compte</button>
-                        </form>
-
-                        <form action="{{ path('app_logout') }}" method="POST" class="w-45">
-                            <button type="submit" class="btn btn-dark btn-lg text-white w-100">Se déconnecter</button>
-                        </form>
+                        <button type="submit" class="btn btn-dark text-white px-4 py-3 rounded-lg shadow-sm custom-btn mr-2">
+                            Mettre à jour
+                        </button>
+                        <a href="{{ path('app_logout') }}" class="btn btn-dark text-white px-4 py-3 rounded-lg shadow-sm custom-btn">
+                            Se déconnecter
+                        </a>
                     </div>
-                </div>
+
+                </form>
+
+                <form method="POST" action="{{ path('utilisateur_delete') }}" class="mt-3">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('delete_profil') }}">
+
+                    <button type="submit" class="btn btn-danger text-white w-100 py-3 rounded-lg shadow-sm custom-btn">
+                        Supprimer le compte
+                    </button>
+                </form>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
