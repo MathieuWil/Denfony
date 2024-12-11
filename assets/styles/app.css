@@ -79,3 +79,44 @@ form .form-control-lg:focus {
 .mt-3 {
     margin-top: 1rem;
 }
+
+/* Style des boutons */
+.custom-btn {
+    transition: all 0.3s ease;
+    border: 2px solid #333;
+    background-color: #000;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Effet de survol des boutons */
+.custom-btn:hover {
+    background-color: #333;
+    border-color: #fff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+}
+
+/* Effet au clic */
+.custom-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Bouton danger (pour la suppression) */
+.btn-danger.custom-btn:hover {
+    background-color: #c82333;
+    border-color: #fff;
+}
+
+/* Espacement entre les deux boutons "Mettre à jour" et "Déconnecter" */
+.mt-4 .btn {
+    margin-right: 15px; /* Ajoute un espacement à droite pour "Mettre à jour" */
+}
+
+
+
