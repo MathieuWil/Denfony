@@ -45,9 +45,9 @@
               <tr>
                   <th scope="col">#</th>
                   <th scope="col">Date de Rendez-vous</th>
-            {% if rdv_ouverts.idMedecin %}
+{#             {% if rdv_ouverts.idMedecin %}
                   <th scope="col">Id médecin</th>
-            {% endif %}
+            {% endif %} #}
                   <th scope="col">Description</th>
                   <th scope="col">Statut</th>
               </tr>
@@ -56,9 +56,9 @@
               <tr>
                   <th scope="row">{{ rdv_ouverts.id }}</th>
                   <td>{{ rdv_ouverts.dateRdv|date('Y-m-d') }}</td>  {# Assurez-vous que "dateRdv" est le bon nom de propriété #}
-            {% if rdv_ouverts.idMedecin %}
-                  <td>{{ rdv_ouverts.idMedecin }}</td>  {# Si "medecin" est une relation dans l'entité #}
-            {% endif %}
+{#             {% if rdv_ouverts.idMedecin %}
+                  <td>{{ rdv_ouverts.idMedecin }}</td>
+            {% endif %} #}
                   <td>{{ rdv_ouverts.description }}</td>
                   <td>{{ rdv_ouverts.statut }}</td>
               </tr>
@@ -95,7 +95,6 @@
               </tr>
           </thead>
           <tbody>
-          {% for rdv_fermes in rdv %}
               <tr>
                   <th scope="row">{{ rdv_fermes.id }}</th>
                   <td>{{ rdv_fermes.dateRdv|date('Y-m-d') }}</td>  {# Assurez-vous que "dateRdv" est le bon nom de propriété #}
@@ -103,7 +102,6 @@
                   <td>{{ rdv_fermes.description }}</td>
                   <td>{{ rdv_fermes.statut }}</td>
               </tr>
-          {% endfor %}
           </tbody>
       </table>
 
@@ -131,6 +129,7 @@
     
 
   {% for rdv_ouverts in rdv %}
+  {% if rdv_ouverts.statut == "en attente" %}
     <a href="{{ path("app_rdv", {"id" : rdv_ouverts.id}) }}">
       <table class="table">
           <thead>
@@ -151,8 +150,8 @@
           </tbody>
       </table>
     </a>
-
-  {% endfor %}
+{% endif %}
+{% endfor %}
 
     </div>
   </div>

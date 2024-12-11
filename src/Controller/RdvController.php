@@ -33,14 +33,55 @@ class RdvController extends AbstractController
 
     
     #[Route('/rdv/{id}/annuler', name: 'app_annulerRdv')]
-    public function annulerRdv(RdvRepository $rdvRepository, EntityManagerInterface $em, Rdv $rdv): Response
+    public function annulerRdv(RdvRepository $rdvRepository, EntityManagerInterface $em, int $id): Response
     {
-/*       $rdv->setStatut("annuler");
+      $rdv = $rdvRepository->findBy(['id' => $id]);
+      $rdv = reset($rdv);
+
+      $rdv->setStatut("annuler");
 
       $em->persist($rdv);
       $em->flush();
 
-      $this->addFlash('success', 'Le RDV à été annulé'); */
+      $this->addFlash('success', 'Le RDV à été annulé');
+
+      return $this->redirectToRoute('app_accueil');
+    }
+
+    
+    #[Route('/rdv/{id}/prendreEnCharge{idMedecin}', name: 'app_prendreEnChargeRdv')]
+    public function prendreEnChargeRdv(RdvRepository $rdvRepository, UtilisateurRepository $utilisateurRepository, EntityManagerInterface $em, int $id, int $idMedecin): Response
+    {
+      $rdv = $rdvRepository->findBy(['id' => $id]);
+      $medecin = $utilisateurRepository->findBy(['id' => $idMedecin]);
+      $rdv = reset($rdv);
+      $medecin = reset($medecin);
+
+      $rdv->setStatut("en cours");
+      $rdv->setIdMedecin($medecin);
+
+
+      $em->persist($rdv);
+      $em->flush();
+
+      $this->addFlash('success', 'Le RDV à été pris en charge');
+
+      return $this->redirectToRoute('app_accueil');
+    }
+
+    
+    #[Route('/rdv/{id}/terminer', name: 'app_terminerRdv')]
+    public function terminerRdv(RdvRepository $rdvRepository, EntityManagerInterface $em, int $id): Response
+    {
+      $rdv = $rdvRepository->findBy(['id' => $id]);
+      $rdv = reset($rdv);
+
+      $rdv->setStatut("terminer");
+
+      $em->persist($rdv);
+      $em->flush();
+
+      $this->addFlash('success', 'Le RDV à été pris en charge');
 
       return $this->redirectToRoute('app_accueil');
     }

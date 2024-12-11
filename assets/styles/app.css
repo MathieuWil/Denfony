@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    margin: 0;
 }
 
 body {
@@ -7,6 +8,10 @@ body {
     font-family: 'Arial', sans-serif;
     height: 100vh;
     margin: 0;
+}
+
+.font-weight-bold {
+  font-weight: 600;
 }
 
 .bg-light-gray {
@@ -81,4 +86,8 @@ form .form-control-lg:focus {
 
 .mt-3 {
     margin-top: 1rem;
+}
+
+nav {
+  background-color: #f4f4f4;
 }

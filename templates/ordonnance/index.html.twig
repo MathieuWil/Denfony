@@ -9,12 +9,19 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Créer une ordonnance</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/mysti/Documents/Bachelor/projets/projet1_dentfony/Denfony/src/Controller/OrdonnanceController.php</code></li>
-        <li>Your template at <code>C:/Users/mysti/Documents/Bachelor/projets/projet1_dentfony/Denfony/templates/ordonnance/index.html.twig</code></li>
-    </ul>
+    {{ form_start(form) }}
+
+    {{ form_row(form.medicament, { 'attr': {'class': 'form-control'} }) }}
+
+    {{ form_row(form.description, { 'attr': {'class': 'form-control'} }) }}
+
+    <div>
+        <button type="submit" class="btn btn-primary">Valider</button>
+    </div>
+
+{{ form_end(form) }}
+
 </div>
 {% endblock %}

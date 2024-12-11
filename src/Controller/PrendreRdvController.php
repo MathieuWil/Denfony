@@ -10,7 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Rdv;
 use App\Form\PrendreRdvType;
-use App\Repository\RdvRepository;
 
 class PrendreRdvController extends AbstractController
 {
