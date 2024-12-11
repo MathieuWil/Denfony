@@ -44,4 +44,17 @@ class RdvController extends AbstractController
 
       return $this->redirectToRoute('app_accueil');
     }
+
+    #[Route('/rdv/{id}/prendreRdv', name: 'app_prendreRdv')]
+    public function prendreRdv(RdvRepository $rdvRepository, EntityManagerInterface $em, Rdv $rdv): Response
+    {
+/*       $rdv->setStatut("annuler");
+
+      $em->persist($rdv);
+      $em->flush();
+
+      $this->addFlash('success', 'Le RDV à été annulé'); */
+
+      return $this->redirectToRoute('app_accueil');
+    }
 }

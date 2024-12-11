@@ -39,6 +39,12 @@
 
     <p>Description du problème</p>
     <p>{{ rdv.description }}</p>
+      {% if rdv.statut == "en attente" %}
+        <a href="{{ path("app_prendreRdv", {"id" : rdv.id}) }}">Prendre en charge le Rendez-Vous</a>
+      {% endif %}
+      {% if rdv.statut == "en cours" %}
+        <a href="{{ path("app_prendreRdv", {"id" : rdv.id}) }}">Annuler le Rendez-Vous</a>
+      {% endif %}
 {% endif %}
 </div>
 
