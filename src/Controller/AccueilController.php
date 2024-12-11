@@ -14,10 +14,12 @@ class AccueilController extends AbstractController
     {
         // Récupération de tous les rendez-vous
         $rdv = $RdvRepository->findAll();
+        $user = $this->getUser();
         
         // Rendu de la vue avec les données du rendez-vous
         return $this->render('accueil/index.html.twig', [
             'rdv' => $rdv,  // On passe la variable 'rdv' à la vue
+            'user' => $user,  // On passe la variable 'user' à la vue
         ]);
     }
 }
