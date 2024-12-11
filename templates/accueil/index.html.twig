@@ -6,12 +6,14 @@
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    #statut-en-attente {background-color : yellow;}
+    #statut-en-cours {background-color : green;}
+    #terminer {background-color : red;}
+    #annuler {background-color : grey;}
+    .card {width : 60%; margin : auto}
 </style>
 
 <div id="page-accueil">
-
-  {{ dump(user) }}
-  {{ dump(rdv) }}
 
   <h1>ACCUEIL</h1>
 
@@ -43,7 +45,7 @@
       <table class="table">
           <thead>
               <tr>
-                  <th scope="col">#</th>
+                  <th scope="col">ID</th>
                   <th scope="col">Date de Rendez-vous</th>
             {% if rdv_ouverts.idMedecin %}
                   <th scope="col">Id médecin</th>
@@ -60,7 +62,12 @@
                   <td>{{ rdv_ouverts.idMedecin }}</td>  {# Si "medecin" est une relation dans l'entité #}
             {% endif %}
                   <td>{{ rdv_ouverts.description }}</td>
-                  <td>{{ rdv_ouverts.statut }}</td>
+                  {% if rdv_ouverts.statut == "en cours" %}
+                  <td id="statut-en-cours">{{ rdv_ouverts.statut }}</td>
+                  {% endif %}
+                  {% if rdv_ouverts.statut == "en attente" %}
+                  <td id="statut-en-attente">{{ rdv_ouverts.statut }}</td>
+                  {% endif %}
               </tr>
           </tbody>
       </table>
@@ -87,7 +94,7 @@
       <table class="table">
           <thead>
               <tr>
-                  <th scope="col">#</th>
+                  <th scope="col">ID</th>
                   <th scope="col">Date de Rendez-vous</th>
                   <th scope="col">Id médecin</th>
                   <th scope="col">Description</th>
@@ -95,15 +102,20 @@
               </tr>
           </thead>
           <tbody>
-          {% for rdv_fermes in rdv %}
               <tr>
                   <th scope="row">{{ rdv_fermes.id }}</th>
                   <td>{{ rdv_fermes.dateRdv|date('Y-m-d') }}</td>  {# Assurez-vous que "dateRdv" est le bon nom de propriété #}
                   <td>{{ rdv_fermes.idMedecin }}</td>  {# Si "medecin" est une relation dans l'entité #}
                   <td>{{ rdv_fermes.description }}</td>
-                  <td>{{ rdv_fermes.statut }}</td>
+
+                {% if rdv_fermes.statut == "annuler" %}
+                  <td id="annuler" >{{ rdv_fermes.statut }}</td>
+                  {% endif %}
+
+                  {% if rdv_fermes.statut == "terminer" %}
+                  <td id="terminer" >{{ rdv_fermes.statut }}</td>
+                  {% endif %}
               </tr>
-          {% endfor %}
           </tbody>
       </table>
 
@@ -125,18 +137,26 @@
 {%  if is_granted("ROLE_MEDECIN")  %}
 {# Début de la gestion des Médecins #}
 
-  <div class="card">
+<div class="card">
+    <div class="card-header">
+      Rendez-Vous Ouverts
+    </div>
     <div class="card-body">
-      <h5 class="card-title">Liste des Rendez-vous à prendre :</h5>
+      <h5 class="card-title">Liste des Rendez-Vous à prendre :</h5>
     
 
   {% for rdv_ouverts in rdv %}
+
+  {% if rdv_ouverts.statut == "en attente" %}
     <a href="{{ path("app_rdv", {"id" : rdv_ouverts.id}) }}">
       <table class="table">
           <thead>
               <tr>
-                  <th scope="col">#</th>
+                  <th scope="col">ID</th>
                   <th scope="col">Date de Rendez-vous</th>
+            {% if rdv_ouverts.idMedecin %}
+                  <th scope="col">Id médecin</th>
+            {% endif %}
                   <th scope="col">Description</th>
                   <th scope="col">Statut</th>
               </tr>
@@ -145,19 +165,114 @@
               <tr>
                   <th scope="row">{{ rdv_ouverts.id }}</th>
                   <td>{{ rdv_ouverts.dateRdv|date('Y-m-d') }}</td>  {# Assurez-vous que "dateRdv" est le bon nom de propriété #}
+            {% if rdv_ouverts.idMedecin %}
+                  <td>{{ rdv_ouverts.idMedecin }}</td>  {# Si "medecin" est une relation dans l'entité #}
+            {% endif %}
                   <td>{{ rdv_ouverts.description }}</td>
-                  <td>{{ rdv_ouverts.statut }}</td>
+                  {% if rdv_ouverts.statut == "en attente" %}
+                  <td id="statut-en-attente">PRENDRE EN CHARGE</td>
+                  {% endif %}
               </tr>
           </tbody>
       </table>
     </a>
 
+  {% endif %}
   {% endfor %}
+
+  {% for rdv_ouverts in rdv %}
+
+  {% if rdv_ouverts.statut == "en cours" %}
+          <h5 class="card-title">Liste des Rendez-Vous pris en charge :</h5>
+    <a href="{{ path("app_rdv", {"id" : rdv_ouverts.id}) }}">
+      <table class="table">
+          <thead>
+              <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Date de Rendez-vous</th>
+            {% if rdv_ouverts.idMedecin %}
+                  <th scope="col">Id médecin</th>
+            {% endif %}
+                  <th scope="col">Description</th>
+                  <th scope="col">Statut</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <th scope="row">{{ rdv_ouverts.id }}</th>
+                  <td>{{ rdv_ouverts.dateRdv|date('Y-m-d') }}</td>  {# Assurez-vous que "dateRdv" est le bon nom de propriété #}
+            {% if rdv_ouverts.idMedecin %}
+                  <td>{{ rdv_ouverts.idMedecin }}</td>  {# Si "medecin" est une relation dans l'entité #}
+            {% endif %}
+                  <td>{{ rdv_ouverts.description }}</td>
+                  {% if rdv_ouverts.statut == "en cours" %}
+                  <td id="statut-en-cours">PRIS EN CHARGE</td>
+                  {% endif %}
+              </tr>
+          </tbody>
+      </table>
+    </a>
+
+  {% endif %}
+  {% endfor %}
+
+  
 
     </div>
   </div>
-{# Fin de la gestion des Médecins #}
-{% endif %}
+
+  <br><br>
+
+  <div class="card">
+    <div class="card-header">
+      Rendez-Vous Terminés
+    </div>
+
+    <div class="card-body">
+      <h5 class="card-title">Liste des rendez-vous terminés :</h5>
+      
+  {% for rdv_fermes in rdv %}
+  {% if rdv_fermes.statut == "terminer" or rdv_fermes.statut == "annuler" %}
+      <table class="table">
+          <thead>
+              <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Date de Rendez-vous</th>
+                  <th scope="col">Id médecin</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Statut</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <th scope="row">{{ rdv_fermes.id }}</th>
+                  <td>{{ rdv_fermes.dateRdv|date('Y-m-d') }}</td>  {# Assurez-vous que "dateRdv" est le bon nom de propriété #}
+                  <td>{{ rdv_fermes.idMedecin }}</td>  {# Si "medecin" est une relation dans l'entité #}
+                  <td>{{ rdv_fermes.description }}</td>
+
+                {% if rdv_fermes.statut == "annuler" %}
+                  <td id="annuler" >{{ rdv_fermes.statut }}</td>
+                  {% endif %}
+
+                  {% if rdv_fermes.statut == "terminer" %}
+                  <td id="terminer" >{{ rdv_fermes.statut }}</td>
+                  {% endif %}
+              </tr>
+          </tbody>
+      </table>
+
+  {% endif %}
+  {% endfor %}
+      
+
+
+
+
+    </div>
+  </div>
+
+{# Fin de la gestion des Patients #}
+{%  endif %}
 
 </div>
 
